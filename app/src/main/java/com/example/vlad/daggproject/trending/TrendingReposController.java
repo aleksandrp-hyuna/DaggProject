@@ -1,11 +1,18 @@
 package com.example.vlad.daggproject.trending;
 
-import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.vlad.daggproject.R;
 import com.example.vlad.daggproject.base.BaseController;
+
+import javax.inject.Inject;
+
+import butterknife.BindView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Vladyslav on 05.12.2017
@@ -13,9 +20,51 @@ import com.example.vlad.daggproject.base.BaseController;
 
 public class TrendingReposController extends BaseController {
 
-    @NonNull
+    @Inject
+    TrendingReposPresenter presenter;
+    @Inject
+    TrendingReposViewModel viewModel;
+
+    @BindView(R.id.repo_list) RecyclerView reposList;
+    @BindView(R.id.loading_indicator) View loadingView;
+    @BindView(R.id.tv_error) TextView errorText;
+
     @Override
-    protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
-        return null;
+    protected void onViewBound(View view) {
+        reposList.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        reposList.setAdapter(new RepoAdapter(presenter));
+    }
+
+    @Override
+    protected Disposable[] subscriptions() {
+        return new Disposable[]{
+                viewModel.loading()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(loading -> {
+                    loadingView.setVisibility(loading ? View.VISIBLE : View.GONE);
+                    reposList.setVisibility(loading ? View.GONE : View.VISIBLE);
+                    errorText.setVisibility(loading ? View.GONE : errorText.getVisibility());
+                }),
+                viewModel.repos()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(((RepoAdapter) reposList.getAdapter())::setData),
+                viewModel.error()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(errorRes -> {
+                    if (errorRes == -1) {
+                        errorText.setText(null);
+                        errorText.setVisibility(View.GONE);
+                    } else {
+                        errorText.setVisibility(View.VISIBLE);
+                        reposList.setVisibility(View.GONE);
+                        errorText.setText(errorRes);
+                    }
+                })
+        };
+    }
+
+    @Override
+    protected int layoutId() {
+        return R.layout.screen_trending_repos;
     }
 }

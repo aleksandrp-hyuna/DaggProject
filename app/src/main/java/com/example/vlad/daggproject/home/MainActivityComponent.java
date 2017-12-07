@@ -1,6 +1,7 @@
 package com.example.vlad.daggproject.home;
 
 import com.example.vlad.daggproject.di.ActivityScope;
+import com.example.vlad.daggproject.ui.NavigationModule;
 
 import dagger.Subcomponent;
 import dagger.android.AndroidInjector;
@@ -11,7 +12,8 @@ import dagger.android.AndroidInjector;
 
 @ActivityScope
 @Subcomponent(modules = {
-        MainScreenBindingModule.class
+        MainScreenBindingModule.class,
+        NavigationModule.class
 })
 public interface MainActivityComponent extends AndroidInjector<MainActivity> {
     @Subcomponent.Builder
