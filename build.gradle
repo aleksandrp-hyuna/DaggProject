@@ -27,7 +27,7 @@ ext {
     buildToolsVersion = '26.0.2'
     minSdkVersion = 21
     targetSdkVersion = 26
-    supportLibraryVersion = '26.1.0'
+    supportLibraryVersion = '27.0.2'
     daggerVersion = '2.11'
     retrofitVersion = '2.3.0'
     moshiVersion = '1.5.0'
@@ -40,6 +40,7 @@ ext {
     conductorVersion = '2.1.4'
     timberVersion = '4.5.1'
     butterknifeVersion = '8.8.1'
+    mockitoVersion = '2.10.0'
 }
 
 task clean(type: Delete) {
