@@ -52,7 +52,6 @@ class TrendingReposViewModel {
 
     Consumer<Throwable> onError() {
         return throwable -> {
-            Log.e(TrendingReposViewModel.class.getSimpleName(), "Error loading Repos", throwable);
             errorRelay.accept(R.string.api_error_repos);
         };
     }
