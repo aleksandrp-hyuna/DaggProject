@@ -1,6 +1,7 @@
 package com.example.vlad.daggproject.base;
 
 import android.app.Application;
+import android.support.annotation.NonNull;
 
 import com.example.vlad.daggproject.di.ActivityInjector;
 
@@ -19,20 +20,24 @@ public class DaggApp extends Application {
     @Inject
     ActivityInjector activityInjector;
 
-    private ApplicationComponent component;
+    protected ApplicationComponent component;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        component = DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(this))
-                .build();
+        component = initComponent();
         component.inject(this);
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+    }
+
+    protected ApplicationComponent initComponent() {
+        return DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
     }
 
     public ActivityInjector getActivityInjector() {
