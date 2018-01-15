@@ -1,5 +1,6 @@
 package com.example.vlad.daggproject.trending;
 
+import com.example.vlad.daggproject.data.RepoRepository;
 import com.example.vlad.daggproject.data.RepoRequester;
 import com.example.vlad.daggproject.di.ScreenScope;
 import com.example.vlad.daggproject.model.Repo;
@@ -14,17 +15,17 @@ import javax.inject.Inject;
 public class TrendingReposPresenter implements RepoAdapter.RepoClickedListener {
 
     private final TrendingReposViewModel viewModel;
-    private final RepoRequester repoRequester;
+    private RepoRepository repoRepository;
 
     @Inject
-    TrendingReposPresenter(TrendingReposViewModel viewModel, RepoRequester repoRequester) {
+    TrendingReposPresenter(TrendingReposViewModel viewModel, RepoRepository repoRepository) {
         this.viewModel = viewModel;
-        this.repoRequester = repoRequester;
+        this.repoRepository = repoRepository;
         loadRepo();
     }
 
     private void loadRepo() {
-        repoRequester.getTrendingRepos()
+        repoRepository.getTrendingRepos()
                 .doOnSubscribe(r -> viewModel.loadingUpdated().accept(true))
                 .doOnEvent((d, t) -> viewModel.loadingUpdated().accept(false))
                 .subscribe(viewModel.reposUpdated(), viewModel.onError());

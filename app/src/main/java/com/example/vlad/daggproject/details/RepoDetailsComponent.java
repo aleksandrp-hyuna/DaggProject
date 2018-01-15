@@ -1,0 +1,34 @@
+package com.example.vlad.daggproject.details;
+
+import com.example.vlad.daggproject.di.ScreenScope;
+
+import javax.inject.Named;
+
+import dagger.BindsInstance;
+import dagger.Subcomponent;
+import dagger.android.AndroidInjector;
+
+/**
+ * Created by Vladyslav on 15.01.2018
+ */
+
+@ScreenScope
+@Subcomponent
+public interface RepoDetailsComponent extends AndroidInjector<RepoDetailsController> {
+
+    @Subcomponent.Builder
+    abstract class Builder extends AndroidInjector.Builder<RepoDetailsController> {
+
+        @BindsInstance
+        public abstract void bindRepoOwner(@Named("repo_owner") String repoOwner);
+
+        @BindsInstance
+        public abstract void bindRepoName(@Named("repo_name") String repoName);
+
+        @Override
+        public void seedInstance(RepoDetailsController instance) {
+            bindRepoName(instance.getArgs().getString(RepoDetailsController.REPO_NAME_KEY));
+            bindRepoOwner(instance.getArgs().getString(RepoDetailsController.REPO_OWNER_KEY));
+        }
+    }
+}

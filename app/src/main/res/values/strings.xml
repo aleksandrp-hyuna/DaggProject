@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">DaggProject</string>
     <string name="api_error_repos">Error loading Repos</string>
+    <string name="contributors_label">Contributors</string>
+    <string name="updated_date_label">Last updated</string>
+    <string name="creation_date_label">Created</string>
 </resources>
